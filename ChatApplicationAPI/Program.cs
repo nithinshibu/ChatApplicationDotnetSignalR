@@ -12,6 +12,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IDictionary<string, UserRoomConnection>>(opt => new Dictionary<string, UserRoomConnection>());
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(builder =>
+	{
+		builder.WithOrigins("http://localhost:4200")
+			.AllowAnyHeader()
+			.AllowAnyMethod()
+			.AllowCredentials();
+	});
+});
 
 var app = builder.Build();
 
@@ -23,9 +33,11 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseEndpoints(endpoints =>
+app.UseRouting();
+app.UseCors();
+app.UseEndpoints(endpoint =>
 {
-	endpoints.MapHub<ChatHub>("/chat");
+	endpoint.MapHub<ChatHub>("/chat");
 });
 
 app.MapControllers();

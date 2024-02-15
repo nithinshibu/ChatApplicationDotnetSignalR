@@ -21,7 +21,7 @@ namespace ChatApplicationAPI.Hub
 
 			_connection[Context.ConnectionId] = userConnection;
 			//once the user is added, we can notify the client, sendasync(provide the method name) and we can provide who is sending this message and also we can specify what message we want to send
-			await Clients.Group(userConnection.Room!).SendAsync("ReceiveMessage","BotNit", $"{userConnection.User} has joined the group");
+			await Clients.Group(userConnection.Room!).SendAsync("ReceiveMessage","BotNit", $"{userConnection.User} has joined the group",DateTime.Now);
 
 			await SendConnectedUser(userConnection.Room!);
 
@@ -53,6 +53,7 @@ namespace ChatApplicationAPI.Hub
 			{
 				return base.OnDisconnectedAsync(exception);
 			}
+			_connection.Remove(Context.ConnectionId);
 			//Group(which room)
 			//SendAsync(methodname,who is sending, the message to the user)
 			Clients.Group(userRoomConnection.Room!).SendAsync("ReceiveMessage","BotNit" , $"{userRoomConnection.User} has left the group");
