@@ -61,7 +61,6 @@ namespace ChatApplicationAPI.Hub
 			//We need to call this method SendConnectedUser to get the connected users
 
 			SendConnectedUser(userRoomConnection.Room!);
-
 			return base.OnDisconnectedAsync(exception);
 		}
 
